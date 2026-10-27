@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Bounty SMP Takenbord</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a8741a' stroke-width='2.4'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: slanke kopbalk met samenvatting, filterregel, vier statuskolommen als werkbord; detailpaneel schuift van rechts in. */
+:root{
+  --bg:#f3f4f6; --surface:#ffffff; --sunk:#e9ebef; --line:#d8dce3;
+  --fg:#1b2230; --muted:#5d6676; --faint:#8a92a1;
+  --accent:#a8741a; --accent-soft:#f6ecd9; --accent-fg:#ffffff;
+  --high:#c2412d; --high-soft:#fbe7e3; --mid:#3b6fb0; --mid-soft:#e4edf8; --low:#6b7484; --low-soft:#eceef2;
+  --done:#2f7d55; --done-soft:#e2f2e9;
+  --shadow:0 1px 2px rgba(20,28,40,.06),0 2px 8px rgba(20,28,40,.05);
+  --f-display:"Archivo",ui-sans-serif,system-ui,sans-serif;
+  --f-body:"Public Sans",ui-sans-serif,system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12161d; --surface:#1a2029; --sunk:#151a22; --line:#2a323e;
+  --fg:#e6e9ee; --muted:#9aa3b2; --faint:#6e7787;
+  --accent:#d9a44a; --accent-soft:#3a2f1c; --accent-fg:#1a1408;
+  --high:#ef7a66; --high-soft:#3d221e; --mid:#7fa9e0; --mid-soft:#1e2b3d; --low:#9aa3b2; --low-soft:#232a35;
+  --done:#62c08f; --done-soft:#1b3328;
+  --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#12161d; --surface:#1a2029; --sunk:#151a22; --line:#2a323e;
+  --fg:#e6e9ee; --muted:#9aa3b2; --faint:#6e7787;
+  --accent:#d9a44a; --accent-soft:#3a2f1c; --accent-fg:#1a1408;
+  --high:#ef7a66; --high-soft:#3d221e; --mid:#7fa9e0; --mid-soft:#1e2b3d; --low:#9aa3b2; --low-soft:#232a35;
+  --done:#62c08f; --done-soft:#1b3328;
+  --shadow:0 1px 2px rgba(0,0,0,.3); color-scheme:dark;}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+.wrap{max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.mark{width:40px;height:40px;border-radius:8px;background:var(--fg);color:var(--bg);display:grid;place-items:center;flex:none}
+.brand h1{font-family:var(--f-display);font-weight:800;font-size:22px;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.brand p{margin:0;color:var(--muted);font-size:13px}
+.stats{display:flex;gap:22px;flex-wrap:wrap}
+.stat{display:flex;flex-direction:column;gap:0}
+.stat b{font-family:var(--f-display);font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat span{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.stat.warn b{color:var(--high)}
+
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search{flex:1 1 220px;min-width:0;position:relative}
+.search input{width:100%;padding:9px 12px 9px 34px;border:1px solid var(--line);background:var(--surface);border-radius:8px}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--faint)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 14px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--high);border-color:var(--high-soft)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+.board-scroll{overflow-x:auto;margin-inline:-4px;padding:4px}
+.board{display:grid;grid-template-columns:repeat(4,minmax(260px,1fr));gap:14px;min-width:1080px}
+.col{background:var(--sunk);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0;min-height:200px}
+.col.drop{outline:2px dashed var(--accent);outline-offset:-2px}
+.col-h{display:flex;align-items:center;justify-content:space-between;padding:2px 4px 6px}
+.col-h h2{font-family:var(--f-display);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin:0;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--faint)}
+.col[data-s="bezig"] .dot{background:var(--mid)}
+.col[data-s="review"] .dot{background:var(--accent)}
+.col[data-s="klaar"] .dot{background:var(--done)}
+.count{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.add-inline{border:1px dashed var(--line);background:transparent;border-radius:8px;padding:8px;color:var(--muted);font-size:13px;text-align:left}
+.add-inline:hover{border-color:var(--accent);color:var(--fg)}
+.empty{color:var(--faint);font-size:13px;padding:10px 6px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:11px 12px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow);text-align:left;width:100%;cursor:pointer}
+.card:hover{border-color:var(--faint)}
+.card.dragging{opacity:.45}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tid{font-family:var(--f-mono);font-size:11px;color:var(--faint)}
+.card h3{margin:0;font-size:14px;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.col[data-s="klaar"] .card h3{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--faint)}
+.card-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.pill{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.p-hoog{background:var(--high-soft);color:var(--high)}
+.p-normaal{background:var(--mid-soft);color:var(--mid)}
+.p-laag{background:var(--low-soft);color:var(--low)}
+.cat{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:1px 7px;border-radius:4px}
+.due{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.due.late{color:var(--high);font-weight:600}
+.who{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.av{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:700;color:#fff;flex:none}
+.av.none{background:var(--sunk);color:var(--faint);border:1px dashed var(--line)}
+.card.top-prio{border-left:3px solid var(--high)}
+
+/* Paneel */
+.scrim{position:fixed;inset:0;background:rgba(10,14,20,.38);z-index:20}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--surface);z-index:21;display:flex;flex-direction:column;
+  border-left:1px solid var(--line);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px)}
+.panel-h{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)}
+.panel-h h2{font-family:var(--f-display);font-size:17px;margin:0}
+.x{border:0;background:transparent;padding:6px;border-radius:6px;color:var(--muted)}
+.panel form{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.field input,.field select,.field textarea{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:9px 11px;width:100%}
+.field textarea{min-height:110px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.panel-f{display:flex;gap:8px;justify-content:space-between;padding:14px 20px;border-top:1px solid var(--line);flex-wrap:wrap}
+.panel-f .r{display:flex;gap:8px}
+.confirm{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--high)}
+.hint{font-size:12px;color:var(--faint);margin:0}
+
+.team-list{display:flex;flex-direction:column;gap:8px}
+.team-row{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:8px}
+.team-row div{flex:1;min-width:0}
+.team-row b{display:block;font-weight:600}
+.team-row small{color:var(--muted)}
+.load-row{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:8px;font-size:13px;z-index:30}
+.notice{background:var(--accent-soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-size:13px}
+@media (max-width:640px){.row2{grid-template-columns:1fr}.stats{gap:16px}}
+@media (prefers-reduced-motion:no-preference){.panel{animation:slide .18s ease-out}@keyframes slide{from{transform:translateX(24px);opacity:.6}}}
+
+html{-webkit-text-size-adjust:100%}
+[hidden]{display:none!important}
+body{margin:0}
+.login{min-height:calc(100vh - 60px);display:grid;place-items:center}
+.login-box{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:28px 24px;display:flex;flex-direction:column;gap:16px;box-shadow:var(--shadow)}
+.login-box .brand h1{font-size:19px}
+.login-box .btn{justify-content:center}
+.err{color:var(--high);font-size:13px;margin:0}
+.check{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.pw-block{border-top:1px solid var(--line);padding-top:14px;margin-top:6px;display:flex;flex-direction:column;gap:10px}
+.pw-block h3{margin:0;font-size:13px;font-family:var(--f-display);text-transform:uppercase;letter-spacing:.06em}
+</style>
+</head>
+<body>
+<main class="login" id="login" hidden>
+  <form class="login-box" id="login-form">
+    <div class="brand"><div class="mark" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.2"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg></div><div><h1>Bounty SMP Takenbord</h1><p>Alleen voor het management-team</p></div></div>
+    <div class="field"><label for="l-pw">Teamwachtwoord</label><input id="l-pw" type="password" autocomplete="current-password" required></div>
+    <label class="check"><input type="checkbox" id="l-remember" checked> Onthoud mij op dit apparaat</label>
+    <p class="err" id="login-err" hidden></p>
+    <button class="btn primary" id="login-btn" type="submit">Inloggen</button>
+  </form>
+</main>
+
+
+<div class="wrap" id="app" hidden>
+  <header class="top">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.2"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg>
+      </div>
+      <div>
+        <h1>Bounty SMP Takenbord</h1>
+        <p>Management-team · lanceringsplanning</p>
+      </div>
+    </div>
+    <div class="stats" id="stats">
+      <div class="stat"><b id="st-open">–</b><span>Open</span></div>
+      <div class="stat"><b id="st-bezig">–</b><span>Bezig</span></div>
+      <div class="stat warn"><b id="st-late">–</b><span>Te laat</span></div>
+      <div class="stat"><b id="st-klaar">–</b><span>Klaar</span></div>
+    </div>
+  </header>
+
+  <div id="notice" class="notice" hidden></div>
+
+  <div class="bar">
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Zoek taken…" aria-label="Zoek taken">
+    </div>
+    <div class="chips" id="who-chips" role="group" aria-label="Filter op persoon"></div>
+    <button class="btn ghost" id="team-btn" type="button">Team</button>
+    <button class="btn ghost" id="logout-btn" type="button">Uitloggen</button>
+    <button class="btn primary" id="new-btn" type="button">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Nieuwe taak
+    </button>
+  </div>
+
+  <div class="board-scroll">
+    <div class="board" id="board"></div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<aside class="panel" id="task-panel" hidden aria-labelledby="tp-title">
+  <div class="panel-h"><h2 id="tp-title">Nieuwe taak</h2><button class="x" type="button" data-close aria-label="Sluiten">✕</button></div>
+  <form id="task-form">
+    <div class="field"><label for="f-title">Titel</label><input id="f-title" required maxlength="140" placeholder="Bijv. Bounty-plugin afronden"></div>
+    <div class="field"><label for="f-desc">Omschrijving</label><textarea id="f-desc" placeholder="Wat moet er gebeuren? Links, details, afspraken…"></textarea></div>
+    <div class="row2">
+      <div class="field"><label for="f-assignee">Toegewezen aan</label><select id="f-assignee"></select></div>
+      <div class="field"><label for="f-status">Status</label>
+        <select id="f-status"><option value="todo">Te doen</option><option value="bezig">Bezig</option><option value="review">Review</option><option value="klaar">Klaar</option></select></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label for="f-prio">Prioriteit</label>
+        <select id="f-prio"><option value="hoog">Hoog</option><option value="normaal" selected>Normaal</option><option value="laag">Laag</option></select></div>
+      <div class="field"><label for="f-due">Deadline</label><input id="f-due" type="date"></div>
+    </div>
+    <div class="field"><label for="f-cat">Categorie</label>
+      <select id="f-cat"><option>Plugin</option><option>Trailer</option><option>Modpack</option><option>Community</option><option>Staff</option><option>Lancering</option><option>Overig</option></select></div>
+    <p class="hint" id="f-meta"></p>
+  </form>
+  <div class="panel-f">
+    <div id="del-area"><button class="btn danger" type="button" id="del-btn">Verwijderen</button></div>
+    <div class="r"><button class="btn ghost" type="button" data-close>Annuleren</button><button class="btn primary" type="submit" form="task-form" id="save-btn">Opslaan</button></div>
+  </div>
+</aside>
+
+<aside class="panel" id="team-panel" hidden aria-labelledby="tm-title">
+  <div class="panel-h"><h2 id="tm-title">Team</h2><button class="x" type="button" data-close aria-label="Sluiten">✕</button></div>
+  <form id="team-form">
+    <div class="team-list" id="team-list"></div>
+    <div class="row2">
+      <div class="field"><label for="m-name">Naam</label><input id="m-name" maxlength="40" placeholder="Bijv. Jay"></div>
+      <div class="field"><label for="m-role">Rol</label><input id="m-role" maxlength="60" placeholder="Bijv. Trailers"></div>
+    </div>
+    <button class="btn" type="submit">Teamlid toevoegen</button>
+    <p class="hint">Teamleden kun je toewijzen aan taken. Verwijder je iemand, dan worden diens taken weer 'Niet toegewezen'.</p>
+  </form>
+  <form id="pw-form" style="padding:0 20px 20px">
+    <div class="pw-block">
+      <h3>Teamwachtwoord wijzigen</h3>
+      <div class="field"><label for="np">Nieuw wachtwoord</label><input id="np" type="password" autocomplete="new-password" minlength="8" placeholder="Minstens 8 tekens"></div>
+      <button class="btn" type="submit">Wachtwoord wijzigen</button>
+      <p class="hint">Na het wijzigen moet iedereen opnieuw inloggen met het nieuwe wachtwoord.</p>
+    </div>
+  </form>
+</aside>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
