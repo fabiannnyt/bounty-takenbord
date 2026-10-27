@@ -144,6 +144,78 @@ body{margin:0}
 .check{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
 .pw-block{border-top:1px solid var(--line);padding-top:14px;margin-top:6px;display:flex;flex-direction:column;gap:10px}
 .pw-block h3{margin:0;font-size:13px;font-family:var(--f-display);text-transform:uppercase;letter-spacing:.06em}
+
+/* Kopbalk rechts: cijfers, belletje, jijzelf */
+.top-right{display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.top-actions{display:flex;align-items:center;gap:8px}
+.icon-btn{position:relative;width:40px;height:40px;border-radius:999px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--fg)}
+.icon-btn[aria-expanded="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--high);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums;border:2px solid var(--bg)}
+.me-btn{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px 4px 4px;height:40px;font-weight:600;font-size:13px}
+.me-btn .av{width:30px;height:30px;font-size:12px}
+
+/* Meldingen */
+.notif{position:fixed;z-index:25;top:calc(76px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));width:min(380px,calc(100vw - 32px));max-height:min(560px,calc(100vh - 110px));
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(10,14,20,.18);display:flex;flex-direction:column;overflow:hidden}
+.notif-h{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line)}
+.notif-h h2{margin:0;font-family:var(--f-display);font-size:15px}
+.linkbtn{border:0;background:none;color:var(--accent);font-weight:600;font-size:12px;padding:4px}
+.notif-list{overflow-y:auto;display:flex;flex-direction:column}
+.n-item{display:flex;gap:10px;align-items:flex-start;padding:11px 14px;border:0;border-bottom:1px solid var(--line);background:transparent;text-align:left;width:100%}
+.n-item:hover{background:var(--sunk)}
+.n-item.unread{background:var(--accent-soft)}
+.n-item .av{width:28px;height:28px;font-size:11px}
+.n-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;font-size:13px}
+.n-body q{color:var(--muted);quotes:none;overflow-wrap:anywhere}
+.n-time{font-size:11px;color:var(--faint)}
+.n-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:6px;flex:none}
+.n-empty{padding:28px 16px;color:var(--muted);font-size:13px;text-align:center}
+
+/* Paneel-inhoud */
+.panel-body{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.panel .panel-body form{flex:none;overflow:visible}
+.section{padding:16px 20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.section-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.section-h h3{margin:0;font-family:var(--f-display);font-size:13px;text-transform:uppercase;letter-spacing:.06em;display:flex;gap:8px;align-items:center}
+.section-h h3 .count{font-weight:500}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
+.thumb{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--sunk);padding:0;max-width:100%}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .file{display:grid;place-items:center;height:100%;font-size:11px;color:var(--muted);padding:6px;text-align:center;overflow-wrap:anywhere}
+.thumb.loading{display:grid;place-items:center;color:var(--muted);font-size:11px}
+.drop-zone{border:1px dashed var(--line);border-radius:8px;padding:12px;text-align:center;color:var(--muted);font-size:13px;background:transparent;width:100%}
+.drop-zone:hover,.drop-zone.over{border-color:var(--accent);color:var(--fg)}
+.comments{display:flex;flex-direction:column;gap:14px}
+.cmt{display:flex;gap:10px}
+.cmt .av{width:28px;height:28px;font-size:11px}
+.cmt-b{flex:1;min-width:0}
+.cmt-meta{display:flex;gap:8px;align-items:baseline;font-size:12px;color:var(--faint)}
+.cmt-meta b{color:var(--fg);font-size:13px}
+.cmt-text{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.cmt-x{border:0;background:none;color:var(--faint);font-size:12px;padding:0;margin-left:auto}
+.mention{background:var(--accent-soft);color:var(--accent);font-weight:600;border-radius:4px;padding:0 3px}
+.composer{position:relative;display:flex;flex-direction:column;gap:8px}
+.composer textarea{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:9px 11px;min-height:70px;resize:vertical;width:100%}
+.composer-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mention-menu{position:absolute;left:0;right:0;bottom:calc(100% + 4px);background:var(--surface);border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 20px rgba(10,14,20,.15);display:flex;flex-direction:column;padding:4px;z-index:5;max-height:220px;overflow-y:auto}
+.mention-menu button{display:flex;align-items:center;gap:8px;border:0;background:transparent;padding:7px 8px;border-radius:6px;text-align:left}
+.mention-menu button[aria-selected="true"],.mention-menu button:hover{background:var(--sunk)}
+.card-counts{display:flex;gap:10px;font-size:12px;color:var(--muted);align-items:center}
+.card-counts span{display:inline-flex;gap:3px;align-items:center;font-variant-numeric:tabular-nums}
+
+/* Wie ben jij + lichtbak */
+.modal{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:rgba(10,14,20,.45);padding:16px}
+.modal-box{width:100%;max-width:400px;background:var(--surface);border-radius:12px;border:1px solid var(--line);padding:22px;display:flex;flex-direction:column;gap:14px}
+.modal-box h2{margin:0;font-family:var(--f-display);font-size:18px}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pick button{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:10px;font-weight:600;text-align:left}
+.pick button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.pick .av{width:30px;height:30px;font-size:12px}
+.lightbox{position:fixed;inset:0;z-index:45;background:rgba(5,7,10,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px}
+.lightbox img{max-width:100%;max-height:calc(100vh - 120px);border-radius:6px;object-fit:contain}
+.lightbox .lb-bar{display:flex;gap:8px;align-items:center;color:#fff;font-size:13px;flex-wrap:wrap;justify-content:center}
+.lightbox .btn{background:#ffffff1a;border-color:#ffffff33;color:#fff}
+@media (max-width:640px){.top-right{width:100%;justify-content:space-between}}
 </style>
 </head>
 <body>
@@ -169,11 +241,20 @@ body{margin:0}
         <p>Management-team · lanceringsplanning</p>
       </div>
     </div>
-    <div class="stats" id="stats">
-      <div class="stat"><b id="st-open">–</b><span>Open</span></div>
-      <div class="stat"><b id="st-bezig">–</b><span>Bezig</span></div>
-      <div class="stat warn"><b id="st-late">–</b><span>Te laat</span></div>
-      <div class="stat"><b id="st-klaar">–</b><span>Klaar</span></div>
+    <div class="top-right">
+      <div class="stats" id="stats">
+        <div class="stat"><b id="st-open">–</b><span>Open</span></div>
+        <div class="stat"><b id="st-bezig">–</b><span>Bezig</span></div>
+        <div class="stat warn"><b id="st-late">–</b><span>Te laat</span></div>
+        <div class="stat"><b id="st-klaar">–</b><span>Klaar</span></div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="bell" type="button" aria-label="Meldingen" aria-expanded="false" aria-controls="notif">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="badge" id="bell-badge" hidden>0</span>
+        </button>
+        <button class="me-btn" id="me-btn" type="button" aria-label="Wissel wie je bent"></button>
+      </div>
     </div>
   </header>
 
@@ -201,6 +282,7 @@ body{margin:0}
 
 <aside class="panel" id="task-panel" hidden aria-labelledby="tp-title">
   <div class="panel-h"><h2 id="tp-title">Nieuwe taak</h2><button class="x" type="button" data-close aria-label="Sluiten">✕</button></div>
+  <div class="panel-body" id="tp-body">
   <form id="task-form">
     <div class="field"><label for="f-title">Titel</label><input id="f-title" required maxlength="140" placeholder="Bijv. Bounty-plugin afronden"></div>
     <div class="field"><label for="f-desc">Omschrijving</label><textarea id="f-desc" placeholder="Wat moet er gebeuren? Links, details, afspraken…"></textarea></div>
@@ -218,6 +300,26 @@ body{margin:0}
       <select id="f-cat"><option>Plugin</option><option>Trailer</option><option>Modpack</option><option>Community</option><option>Staff</option><option>Lancering</option><option>Overig</option></select></div>
     <p class="hint" id="f-meta"></p>
   </form>
+  <p class="hint" id="extras-hint" style="padding:0 20px 18px">Na het opslaan kun je hier foto's toevoegen en reageren.</p>
+  <div id="extras" hidden>
+    <section class="section">
+      <div class="section-h"><h3>Bijlagen <span class="count" id="att-count">0</span></h3>
+        <button class="linkbtn" type="button" id="att-add">+ Foto of PDF toevoegen</button></div>
+      <div class="thumbs" id="thumbs"></div>
+      <button class="drop-zone" type="button" id="drop-zone">Sleep foto's hierheen of tik om te uploaden</button>
+      <input type="file" id="file-in" accept="image/*,application/pdf" multiple hidden>
+    </section>
+    <section class="section">
+      <div class="section-h"><h3>Reacties <span class="count" id="cmt-count">0</span></h3></div>
+      <div class="comments" id="comments"></div>
+      <div class="composer">
+        <div class="mention-menu" id="mention-menu" role="listbox" hidden></div>
+        <textarea id="cmt-in" maxlength="4000" placeholder="Schrijf een reactie… Typ @ om iemand te taggen"></textarea>
+        <div class="composer-row"><span class="hint">Ctrl/⌘ + Enter om te plaatsen</span><button class="btn primary" type="button" id="cmt-send">Plaatsen</button></div>
+      </div>
+    </section>
+  </div>
+  </div>
   <div class="panel-f">
     <div id="del-area"><button class="btn danger" type="button" id="del-btn">Verwijderen</button></div>
     <div class="r"><button class="btn ghost" type="button" data-close>Annuleren</button><button class="btn primary" type="submit" form="task-form" id="save-btn">Opslaan</button></div>
@@ -244,6 +346,24 @@ body{margin:0}
     </div>
   </form>
 </aside>
+
+<div class="notif" id="notif" hidden role="dialog" aria-label="Meldingen">
+  <div class="notif-h"><h2>Meldingen</h2><button class="linkbtn" type="button" id="notif-all">Alles gelezen</button></div>
+  <div class="notif-list" id="notif-list"></div>
+</div>
+
+<div class="modal" id="who-modal" hidden>
+  <div class="modal-box" role="dialog" aria-labelledby="who-title">
+    <h2 id="who-title">Wie ben jij?</h2>
+    <p class="hint">Zo weet het bord van wie reacties komen en welke meldingen voor jou zijn. Je kunt dit later wisselen rechtsboven.</p>
+    <div class="pick" id="who-pick"></div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" hidden>
+  <img id="lb-img" alt="">
+  <div class="lb-bar"><span id="lb-name"></span><button class="btn" type="button" id="lb-del">Verwijderen</button><button class="btn" type="button" id="lb-close">Sluiten</button></div>
+</div>
 
 <div class="toast" id="toast" hidden></div>
 
